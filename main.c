@@ -95,6 +95,7 @@ int main(int argc, char **argv) {
         clockStart = clock();
 
         if (clockCnt == clocksPerFrame) {
+            clockCnt = 0;
             c8.dt -= c8.dt > 0;
             c8.st -= c8.st > 0;
 
