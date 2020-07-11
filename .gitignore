@@ -1,3 +1,7 @@
 chip8
 chip8-debug
 roms/
+compile_commands.json
+.idea/
+CMakeLists.txt
+build/
