@@ -15,6 +15,9 @@
 #define C8_CPU_CLK 600
 #define C8_REFRESH 60
 
+#define FILL_CHAR '\xdb'
+#define EMPTY_CHAR ' '
+
 struct C8_c8 {
     uint8_t  dsp[C8_DSP_WIDTH * C8_DSP_HEIGHT / 8];
     uint16_t stack[C8_STACK_SIZE];
@@ -104,9 +107,9 @@ int main(int argc, char **argv) {
                 for (uint8_t j = 0; j < C8_DSP_WIDTH / 8; ++j)
                     for (uint8_t k = 128; k > 0; k >>= 1) {
                         if (c8.dsp[i * (C8_DSP_WIDTH / 8) + j] & k)
-                            addch('\xdb');
+                            addch(FILL_CHAR);
                         else
-                            addch(' ');
+                            addch(EMPTY_CHAR);
                     }
                 addch('\n');
             }
