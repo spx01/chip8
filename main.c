@@ -89,6 +89,7 @@ int main(int argc, char **argv) {
     raw();
     noecho();
     timeout(0);
+    curs_set(0);
 
     c8.pc = C8_MEM_RESERVED;
     for (;;) {
