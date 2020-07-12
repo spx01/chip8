@@ -321,6 +321,7 @@ int main(int argc, char **argv) {
             // }
 
             // Dxyn drw vx vy nibble
+            c8.v[0xF] = 0;
             uint16_t pos = c8.v[y] * C8_DSP_WIDTH + c8.v[x];
             for (uint8_t i = 0; i < (uint8_t)(op & 0xF); ++i, pos += C8_DSP_WIDTH) {
                 uint16_t dspBytes = ((uint16_t)c8.dsp[pos / 8] << 8) + c8.dsp[pos / 8 + 1];
