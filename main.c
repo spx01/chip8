@@ -15,19 +15,20 @@
 #define C8_CPU_CLK 600
 #define C8_REFRESH 60
 
+#define KEY_BUFFER_LIMIT 5
 #define FILL_CHAR '\xdb'
 #define EMPTY_CHAR ' '
 
 struct C8_c8 {
-    uint8_t  dsp[C8_DSP_WIDTH * C8_DSP_HEIGHT / 8];
     uint16_t stack[C8_STACK_SIZE];
-    uint8_t  v[16];
     uint16_t i:12;
     uint16_t pc:12;
-    uint16_t keys;
+    uint8_t  mem[C8_MEM_TOTAL];
+    uint8_t  dsp[C8_DSP_WIDTH * C8_DSP_HEIGHT / 8];
+    uint8_t  keys[16];
+    uint8_t  v[16];
     uint8_t  sp;
     uint8_t  dt, st;
-    uint8_t  mem[C8_MEM_TOTAL];
 } c8 = {.mem = {
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
     0x20, 0x60, 0x20, 0x20, 0x70, // 1
@@ -122,56 +123,55 @@ int main(int argc, char **argv) {
         uint8_t x = (op & 0xF00) >> 8, y = (op & 0xF0) >> 4;
 
         c8.pc += 2;
-        c8.keys = 0;
         while ((ch = getch()) != ERR) {
             switch (ch) {
             case '1':
-                c8.keys |= 1 << C8_K00;
+                c8.keys[C8_K00] += c8.keys[C8_K00] < KEY_BUFFER_LIMIT;
                 break;
             case '2':
-                c8.keys |= 1 << C8_K01;
+                c8.keys[C8_K01] += c8.keys[C8_K01] < KEY_BUFFER_LIMIT;
                 break;
             case '3':
-                c8.keys |= 1 << C8_K02;
+                c8.keys[C8_K02] += c8.keys[C8_K02] < KEY_BUFFER_LIMIT;
                 break;
             case '4':
-                c8.keys |= 1 << C8_K03;
+                c8.keys[C8_K03] += c8.keys[C8_K03] < KEY_BUFFER_LIMIT;
                 break;
             case 'q':
-                c8.keys |= 1 << C8_K10;
+                c8.keys[C8_K10] += c8.keys[C8_K10] < KEY_BUFFER_LIMIT;
                 break;
             case 'w':
-                c8.keys |= 1 << C8_K11;
+                c8.keys[C8_K11] += c8.keys[C8_K11] < KEY_BUFFER_LIMIT;
                 break;
             case 'e':
-                c8.keys |= 1 << C8_K12;
+                c8.keys[C8_K12] += c8.keys[C8_K12] < KEY_BUFFER_LIMIT;
                 break;
             case 'r':
-                c8.keys |= 1 << C8_K13;
+                c8.keys[C8_K13] += c8.keys[C8_K13] < KEY_BUFFER_LIMIT;
                 break;
             case 'a':
-                c8.keys |= 1 << C8_K20;
+                c8.keys[C8_K20] += c8.keys[C8_K20] < KEY_BUFFER_LIMIT;
                 break;
             case 's':
-                c8.keys |= 1 << C8_K21;
+                c8.keys[C8_K21] += c8.keys[C8_K21] < KEY_BUFFER_LIMIT;
                 break;
             case 'd':
-                c8.keys |= 1 << C8_K22;
+                c8.keys[C8_K22] += c8.keys[C8_K22] < KEY_BUFFER_LIMIT;
                 break;
             case 'f':
-                c8.keys |= 1 << C8_K23;
+                c8.keys[C8_K23] += c8.keys[C8_K23] < KEY_BUFFER_LIMIT;
                 break;
             case 'z':
-                c8.keys |= 1 << C8_K30;
+                c8.keys[C8_K30] += c8.keys[C8_K30] < KEY_BUFFER_LIMIT;
                 break;
             case 'x':
-                c8.keys |= 1 << C8_K31;
+                c8.keys[C8_K31] += c8.keys[C8_K31] < KEY_BUFFER_LIMIT;
                 break;
             case 'c':
-                c8.keys |= 1 << C8_K32;
+                c8.keys[C8_K32] += c8.keys[C8_K32] < KEY_BUFFER_LIMIT;
                 break;
             case 'v':
-                c8.keys |= 1 << C8_K33;
+                c8.keys[C8_K33] += c8.keys[C8_K33] < KEY_BUFFER_LIMIT;
                 break;
             case 'c' & 0x1F:
                 goto END;
@@ -338,11 +338,13 @@ int main(int argc, char **argv) {
             switch (op & 0xFF) {
             case 0x9E:
                 // Ex9E skp vx
-                c8.pc += 2 * (c8.keys >> c8.v[x] & 1);
+                c8.pc += 2 * (c8.keys[c8.v[x]]);
+                c8.keys[c8.v[x]] -= c8.keys[c8.v[x]] > 0;
                 break;
             case 0xA1:
                 // ExA1 sknp vx
-                c8.pc += 2 * !(c8.keys >> c8.v[x] & 1);
+                c8.pc += 2 * !(c8.keys[c8.v[x]]);
+                c8.keys[c8.v[x]] -= c8.keys[c8.v[x]] > 0;
                 break;
             default:
                 goto UNK_OP;
