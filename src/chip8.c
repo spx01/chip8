@@ -5,7 +5,7 @@
 #include "chip8.h"
 #include "util.h"
 
-struct C8_c8 g_c8 = {.pc = C8_MEM_RESERVED, .mem = C8_CHARACTERS};
+struct C8 g_c8 = {.pc = C8_MEM_RESERVED, .mem = C8_CHARACTERS};
 
 void c8UpdateTimers() {
     g_c8.dt -= g_c8.dt > 0;

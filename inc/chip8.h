@@ -32,7 +32,7 @@
     0xF0, 0x80, 0xF0, 0x80, 0x80, \
 }
 
-extern struct C8_c8 {
+extern struct C8 {
     u16 stack[C8_STACK_SIZE];
     u16 i:12;
     u16 pc:12;
