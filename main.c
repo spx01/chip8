@@ -69,8 +69,11 @@ enum eC8_keys {
     C8_K33
 };
 
-bool loadRomFile(const char *filename, uint8_t *ptr, long maxSize) {
-    FILE *rom = fopen(filename, "rb");
+bool loadRomFile(const char *romPath, uint8_t *ptr, long maxSize) {
+    FILE *rom;
+    if (!(rom = fopen(romPath, "rb")))
+            return false;
+
     fseek(rom, 0, SEEK_END);
 
     if (ftell(rom) > maxSize)
