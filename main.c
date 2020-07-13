@@ -19,7 +19,7 @@
 #define KEY_BUFFER_CLEAR_FRAMES 10
 #define PRINT_FILL {waddch(win, ACS_BLOCK); waddch(win, ACS_BLOCK);}
 #define PRINT_EMPTY {waddstr(win, "  ");}
-#define PIXEL_CHAR_WIDTH 2
+#define PRINT_PIXEL_WIDTH 2
 
 struct C8_c8 {
     uint16_t stack[C8_STACK_SIZE];
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
     timeout(0);
     curs_set(0);
 
-    WINDOW *win = newwin(C8_DSP_HEIGHT + 2, C8_DSP_WIDTH * PIXEL_CHAR_WIDTH + 2, 0, 0);
+    WINDOW *win = newwin(C8_DSP_HEIGHT + 2, C8_DSP_WIDTH * PRINT_PIXEL_WIDTH + 2, 0, 0);
     box(win, 0, 0);
 
     c8.pc = C8_MEM_RESERVED;
