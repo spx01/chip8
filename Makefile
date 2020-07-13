@@ -8,16 +8,16 @@ OUTDIR  = out
 chip8:  $(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%.o, $(wildcard $(SRCDIR)/*.c))
 	$(CC) $^ -o $@ -O2 $(CFLAGS) $(LDFLAGS)
 
-$(OUTDIR)/%.o: $(SRCDIR)/%.c | $(OUTDIR)
-	$(CC) -c $^ -o $@ -O2 $(CFLAGS) -I$(INCDIR)
+$(OUTDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/%.h | $(OUTDIR)
+	$(CC) -c $< -o $@ -O2 $(CFLAGS) -I$(INCDIR)
 
 debug: chip8-debug
 
 chip8-debug:  $(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%-debug.o, $(wildcard $(SRCDIR)/*.c))
 	$(CC) $^ -o $@ -Og $(CFLAGS) $(LDFLAGS)
 
-$(OUTDIR)/%-debug.o: $(SRCDIR)/%.c | $(OUTDIR)
-	$(CC) -c $^ -o $@ -Og $(CFLAGS) -I$(INCDIR)
+$(OUTDIR)/%-debug.o: $(SRCDIR)/%.c $(INCDIR)/%.h | $(OUTDIR)
+	$(CC) -c $< -o $@ -Og $(CFLAGS) -I$(INCDIR)
 
 $(OUTDIR):
 	mkdir -p $(OUTDIR)
