@@ -17,8 +17,9 @@
 
 #define KEY_BUFFER_LIMIT 5
 #define KEY_BUFFER_CLEAR_FRAMES 10
-#define FILL_CHAR '\xdb'
-#define EMPTY_CHAR ' '
+#define PRINT_FILL {waddch(win, ACS_BLOCK); waddch(win, ACS_BLOCK);}
+#define PRINT_EMPTY {waddstr(win, "  ");}
+#define PIXEL_CHAR_WIDTH 2
 
 struct C8_c8 {
     uint16_t stack[C8_STACK_SIZE];
@@ -93,6 +94,9 @@ int main(int argc, char **argv) {
     timeout(0);
     curs_set(0);
 
+    WINDOW *win = newwin(C8_DSP_HEIGHT + 2, C8_DSP_WIDTH * PIXEL_CHAR_WIDTH + 2, 0, 0);
+    box(win, 0, 0);
+
     c8.pc = C8_MEM_RESERVED;
     for (;;) {
         static struct timespec sleepTime;
@@ -106,17 +110,18 @@ int main(int argc, char **argv) {
             c8.dt -= c8.dt > 0;
             c8.st -= c8.st > 0;
 
-            move(0, 0);
+            wmove(win, 1, 1);
             for (uint8_t i = 0; i < C8_DSP_HEIGHT; ++i) {
                 for (uint8_t j = 0; j < C8_DSP_WIDTH / 8; ++j)
                     for (uint8_t k = 128; k > 0; k >>= 1) {
                         if (c8.dsp[i * (C8_DSP_WIDTH / 8) + j] & k)
-                            addch(FILL_CHAR);
+                            PRINT_FILL
                         else
-                            addch(EMPTY_CHAR);
+                            PRINT_EMPTY
                     }
-                addch('\n');
+                wmove(win, i + 2, 1);
             }
+            wrefresh(win);
 
             for (uint8_t i = 0; i < 16; ++i)
                 if (framesSinceLastPress[i]++ == KEY_BUFFER_CLEAR_FRAMES)
@@ -442,6 +447,7 @@ UNK_OP:
     }
 
 END:
+    delwin(win);
     endwin();
     return 0;
 }
