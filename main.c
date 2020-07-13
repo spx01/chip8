@@ -212,12 +212,6 @@ int main(int argc, char **argv) {
 
         switch (op >> 12) {
         case 0x0:
-            // super chip-48
-            // if (op >> 4 == 0xC) {
-            //     // 00Cn scd nibble
-            //     break;
-            // }
-
             switch (op & 0xFF) {
             case 0xE0:
                 // 00E0 cls
@@ -227,24 +221,6 @@ int main(int argc, char **argv) {
                 // 00EE ret
                 c8.pc = c8.stack[c8.sp--];
                 break;
-
-            // super chip-48
-            // case 0xFB:
-            //     // 00FB scr
-            //     break;
-            // case 0xFC:
-            //     // 00FC scl
-            //     break;
-            // case 0xFD:
-            //     // 00FD exit
-            //     break;
-            // case 0xFE:
-            //     // 00FE low
-            //     break;
-            // case 0xFF:
-            //     // 00FF high
-            //     break;
-
             default:
                 goto UNK_OP;
             }
@@ -344,12 +320,6 @@ int main(int argc, char **argv) {
             c8.v[x] = op & 0xFF & rand();
             break;
         case 0xD: {
-            // super chip-48
-            // if (!(op & 0xF)) {
-            //     // Dxy0 drw vx vy 0
-            //     break;
-            // }
-
             // Dxyn drw vx vy nibble
             c8.v[0xF] = 0;
             uint16_t pos = c8.v[y] * C8_DSP_WIDTH + c8.v[x];
@@ -421,23 +391,10 @@ int main(int argc, char **argv) {
                 for (uint8_t i = 0; i <= x; ++i)
                      c8.v[i] = c8.mem[c8.i + i];
                 break;
-
-            // super chip-48
-            // case 0x30:
-            //     // Fx30 ld hf vx
-            //     break;
-            // case 0x75:
-            //     // Fx75 ld r vx
-            //     break;
-            // case 0x85:
-            //     // Fx85 ld vx r
-            //     break;
-
             default:
                 goto UNK_OP;
             }
             break;
-
         default:
 UNK_OP:
            fprintf(stderr, "unknown opcode: %04X\n", op);
