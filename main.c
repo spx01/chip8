@@ -204,6 +204,15 @@ int main(int argc, char **argv) {
                 goto END;
             case KEY_RESIZE:
                 break;
+            case ' ':
+                mvprintw(C8_DSP_HEIGHT + 2, 0, "PAUSED");
+                while (getch() != ' ') {
+                    sleepTime.tv_nsec = 1e9 / 60;
+                    nanosleep(&sleepTime, NULL);
+                }
+                move(C8_DSP_HEIGHT + 2, 0);
+                clrtoeol();
+                break;
             default:
                 ++otherKeys;
             }
