@@ -16,6 +16,7 @@
 #define C8_REFRESH 60
 
 #define KEY_BUFFER_LIMIT 5
+#define KEY_BUFFER_CLEAR_FRAMES 10
 #define FILL_CHAR '\xdb'
 #define EMPTY_CHAR ' '
 
@@ -95,7 +96,8 @@ int main(int argc, char **argv) {
     c8.pc = C8_MEM_RESERVED;
     for (;;) {
         static struct timespec sleepTime;
-        static int clocksPerFrame = C8_CPU_CLK / C8_REFRESH, clockCnt;
+        static uint8_t clocksPerFrame = C8_CPU_CLK / C8_REFRESH, clockCnt;
+        static uint8_t framesSinceLastPress[16];
         clock_t clockStart;
         clockStart = clock();
 
@@ -115,6 +117,10 @@ int main(int argc, char **argv) {
                     }
                 addch('\n');
             }
+
+            for (uint8_t i = 0; i < 16; ++i)
+                if (framesSinceLastPress[i]++ == KEY_BUFFER_CLEAR_FRAMES)
+                    c8.keys[i] = 0;
         }
 
         int ch;
@@ -127,51 +133,67 @@ int main(int argc, char **argv) {
             switch (ch) {
             case '1':
                 c8.keys[C8_K00] += c8.keys[C8_K00] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K00] = 0;
                 break;
             case '2':
                 c8.keys[C8_K01] += c8.keys[C8_K01] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K01] = 0;
                 break;
             case '3':
                 c8.keys[C8_K02] += c8.keys[C8_K02] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K02] = 0;
                 break;
             case '4':
                 c8.keys[C8_K03] += c8.keys[C8_K03] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K03] = 0;
                 break;
             case 'q':
                 c8.keys[C8_K10] += c8.keys[C8_K10] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K10] = 0;
                 break;
             case 'w':
                 c8.keys[C8_K11] += c8.keys[C8_K11] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K11] = 0;
                 break;
             case 'e':
                 c8.keys[C8_K12] += c8.keys[C8_K12] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K12] = 0;
                 break;
             case 'r':
                 c8.keys[C8_K13] += c8.keys[C8_K13] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K13] = 0;
                 break;
             case 'a':
                 c8.keys[C8_K20] += c8.keys[C8_K20] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K20] = 0;
                 break;
             case 's':
                 c8.keys[C8_K21] += c8.keys[C8_K21] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K21] = 0;
                 break;
             case 'd':
                 c8.keys[C8_K22] += c8.keys[C8_K22] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K22] = 0;
                 break;
             case 'f':
                 c8.keys[C8_K23] += c8.keys[C8_K23] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K23] = 0;
                 break;
             case 'z':
                 c8.keys[C8_K30] += c8.keys[C8_K30] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K30] = 0;
                 break;
             case 'x':
                 c8.keys[C8_K31] += c8.keys[C8_K31] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K31] = 0;
                 break;
             case 'c':
                 c8.keys[C8_K32] += c8.keys[C8_K32] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K32] = 0;
                 break;
             case 'v':
                 c8.keys[C8_K33] += c8.keys[C8_K33] < KEY_BUFFER_LIMIT;
+                framesSinceLastPress[C8_K33] = 0;
                 break;
             case 'c' & 0x1F:
                 goto END;
