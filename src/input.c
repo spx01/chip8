@@ -8,8 +8,7 @@ u8 framesSinceLastPress[16];
 
 void updateKeyBufferFrame() {
     for (u8 i = 0; i < 16; ++i)
-        if (framesSinceLastPress[i]++ == KEY_BUFFER_CLEAR_FRAMES)
-            g_c8.keys[i] = 0;
+        g_c8.keys[i] *= ++framesSinceLastPress[i] < KEY_BUFFER_CLEAR_FRAMES;
 }
 
 bool validKeys;

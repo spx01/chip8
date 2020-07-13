@@ -126,12 +126,13 @@ void c8Clock() {
         g_c8.v[0xF] = 0;
         u16 pos = g_c8.v[y] * C8_DSP_WIDTH + g_c8.v[x];
         for (u8 i = 0; i < (u8)(op & 0xF); ++i, pos += C8_DSP_WIDTH, pos %= C8_DSP_WIDTH * C8_DSP_HEIGHT) {
-            u16 dspBytes = ((u16)g_c8.dsp[pos / 8] << 8) + g_c8.dsp[pos / 8 + 1];
+            u8 tmp = pos / 8;
+            u16 dspBytes = ((u16)g_c8.dsp[tmp] << 8) + g_c8.dsp[tmp + 1];
             u16 memBytes = g_c8.mem[g_c8.i + i] << (8 - pos % 8);
             g_c8.v[0xF] |= (memBytes & dspBytes) != 0;
             dspBytes ^= memBytes;
-            g_c8.dsp[pos / 8] = dspBytes >> 8;
-            g_c8.dsp[pos / 8 + 1] = dspBytes & 0xFF;
+            g_c8.dsp[tmp] = dspBytes >> 8;
+            g_c8.dsp[tmp + 1] = dspBytes & 0xFF;
         }
         break;
     }
@@ -161,11 +162,9 @@ void c8Clock() {
             g_c8.pc -= 2 * !validKeys;
 
             extern u8 framesSinceLastPress[16];
-            for (u8 i = 0; i < 16; ++i)
-                if (!framesSinceLastPress[i]) {
-                    g_c8.v[x] = i;
-                    break;
-                }
+            u8 i;
+            for (i = 0; framesSinceLastPress[i]; ++i);
+            g_c8.v[x] = i;
             break;
         }
         case 0x15:

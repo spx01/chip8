@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
         clock_t clockStart;
         clockStart = clock();
 
-        if (clockCnt == C8_CLOCKS_PER_FRAME) {
+        if (++clockCnt == C8_CLOCKS_PER_FRAME) {
             clockCnt = 0;
             c8UpdateTimers();
             drawDisplay();
@@ -35,7 +35,6 @@ int main(int argc, char **argv) {
 
         c8Clock();
 
-        ++clockCnt;
         sleepSec(1.0 / C8_CLOCK_SPEED - ((double)(clock() - clockStart)) / CLOCKS_PER_SEC);
     }
     exitC8();
