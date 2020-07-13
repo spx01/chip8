@@ -85,11 +85,9 @@ void handleInput() {
             break;
         case 'c' & 0x1F:
             g_shouldExit = 1;
-        case KEY_RESIZE:
             break;
         case ' ':
             pause();
-            break;
         default:
             ++otherKeys;
         }
