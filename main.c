@@ -202,6 +202,8 @@ int main(int argc, char **argv) {
                 break;
             case 'c' & 0x1F:
                 goto END;
+            case KEY_RESIZE:
+                break;
             default:
                 ++otherKeys;
             }
