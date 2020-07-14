@@ -4,7 +4,7 @@
 #include <ncurses.h>
 
 #include "chip8.h"
-#include "display.h"
+#include "window.h"
 #include "util.h"
 
 bool g_shouldExit = 0;
@@ -47,11 +47,11 @@ void initC8() {
     noecho();
     timeout(0);
     curs_set(0);
-    initDisplay();
+    initWindow();
 }
 
 void exitC8() {
-    exitDisplay();
+    exitWindow();
     endwin();
 }
 

@@ -6,7 +6,7 @@
 #include <ncurses.h>
 
 #include "chip8.h"
-#include "display.h"
+#include "window.h"
 #include "input.h"
 #include "util.h"
 
@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
         if (++clockCnt == C8_CLOCKS_PER_FRAME) {
             clockCnt = 0;
             c8UpdateTimers();
-            drawDisplay();
+            updateWindow();
             updateKeyBufferFrame();
         }
 

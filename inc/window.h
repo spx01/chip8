@@ -5,9 +5,9 @@
 #define PRINT_EMPTY {waddstr(c8Win, "  ");}
 #define PRINT_PIXEL_WIDTH 2
 
-void initDisplay();
-void drawDisplay();
-void exitDisplay();
+void initWindow();
+void updateWindow();
+void exitWindow();
 
 #endif
 
