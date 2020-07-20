@@ -54,4 +54,3 @@ void exitC8() {
     exitWindow();
     endwin();
 }
-

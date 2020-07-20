@@ -67,4 +67,3 @@ void c8UpdateTimers();
 void c8Clock();
 
 #endif
-

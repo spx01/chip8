@@ -94,4 +94,3 @@ void handleInput() {
     }
     validKeys = totalKeys != otherKeys;
 }
-

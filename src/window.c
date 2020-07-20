@@ -28,4 +28,3 @@ void updateWindow() {
 void exitWindow() {
     delwin(c8Win);
 }
-

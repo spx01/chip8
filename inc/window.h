@@ -10,4 +10,3 @@ void updateWindow();
 void exitWindow();
 
 #endif
-
