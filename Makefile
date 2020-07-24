@@ -8,7 +8,7 @@ CC       = clang
 CFLAGS   = -Wall -Wextra -Wpedantic -std=gnu11
 LDFLAGS  = -lncurses
 INCFLAGS = -I$(INCDIR)
-DEPFLAGS = -MMD -MP -MF$(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%.o, $<)
+DEPFLAGS = -MMD -MP -MF$(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%.d, $<)
 
 RELFLAGS = -O2
 DBGFLAGS = -g -Og
