@@ -1,33 +1,42 @@
-CC      = clang
-CFLAGS  = -Wall -Wextra -Wpedantic -std=gnu11
-LDFLAGS = -lncurses
-SRCDIR  = src
-INCDIR  = inc
-OUTDIR  = out
+NAME     = chip8
 
-chip8: $(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%.o, $(wildcard $(SRCDIR)/*.c))
-	$(CC) $^ -o $@ -O2 $(CFLAGS) $(LDFLAGS)
+SRCDIR   = src
+INCDIR   = inc
+OUTDIR   = out
 
-$(OUTDIR)/main.o: $(SRCDIR)/main.c
-	$(CC) -c $^ -o $@ -O2 $(CFLAGS) -I$(INCDIR)
+CC       = clang
+CFLAGS   = -Wall -Wextra -Wpedantic -std=gnu11
+LDFLAGS  = -lncurses
+INCFLAGS = -I$(INCDIR)
+DEPFLAGS = -MMD -MP -MF$(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%.o, $<)
 
-$(OUTDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/%.h | $(OUTDIR)
-	$(CC) -c $< -o $@ -O2 $(CFLAGS) -I$(INCDIR)
+RELFLAGS = -O2
+DBGFLAGS = -g -Og
 
-debug: chip8-debug
+.PHONY: all release debug clean
 
-chip8-debug: $(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%-debug.o, $(wildcard $(SRCDIR)/*.c))
-	$(CC) $^ -o $@ -Og $(CFLAGS) $(LDFLAGS)
+release: $(NAME)
 
-$(OUTDIR)/main-debug.o: $(SRCDIR)/main.c
-	$(CC) -c $^ -o $@ -Og $(CFLAGS) -I$(INCDIR)
+all: release debug
 
-$(OUTDIR)/%-debug.o: $(SRCDIR)/%.c $(INCDIR)/%.h | $(OUTDIR)
-	$(CC) -c $< -o $@ -Og $(CFLAGS) -I$(INCDIR)
+$(NAME): $(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%.o, $(wildcard $(SRCDIR)/*.c))
+	$(CC) $^ -o $@ $(CFLAGS) $(RELFLAGS) $(LDFLAGS)
+
+$(OUTDIR)/%.o: $(SRCDIR)/%.c | $(OUTDIR)
+	$(CC) -c $< -o $@ $(INCFLAGS) $(DEPFLAGS) $(CFLAGS) $(RELFLAGS)
+
+debug: $(NAME)-dbg
+
+$(NAME)-dbg: $(patsubst $(SRCDIR)/%.c, $(OUTDIR)/%-dbg.o, $(wildcard $(SRCDIR)/*.c))
+	$(CC) $^ -o $@ $(CFLAGS) $(DBGFLAGS) $(LDFLAGS)
+
+$(OUTDIR)/%-dbg.o: $(SRCDIR)/%.c | $(OUTDIR)
+	$(CC) -c $< -o $@ $(INCFLAGS) $(DEPFLAGS) $(CFLAGS) $(DBGFLAGS)
 
 $(OUTDIR):
 	mkdir -p $(OUTDIR)
 
 clean:
-	$(RM) chip8 chip8-debug $(OUTDIR)/*
+	$(RM) $(NAME) $(NAME)-dbg $(OUTDIR)/*
 
+-include $(OUTDIR)/*.d
