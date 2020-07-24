@@ -125,7 +125,8 @@ void c8Clock() {
         // Dxyn drw vx vy nibble
         g_c8.v[0xF] = 0;
         u16 pos = g_c8.v[y] * C8_DSP_WIDTH + g_c8.v[x];
-        for (u8 i = 0; i < (u8)(op & 0xF); ++i, pos += C8_DSP_WIDTH, pos %= C8_DSP_WIDTH * C8_DSP_HEIGHT) {
+        for (u8 i = 0; i < (u8)(op & 0xF); ++i, pos += C8_DSP_WIDTH,
+            pos %= C8_DSP_WIDTH * C8_DSP_HEIGHT) {
             u8 tmp = pos / 8;
             u16 dspBytes = ((u16)g_c8.dsp[tmp] << 8) + g_c8.dsp[tmp + 1];
             u16 memBytes = g_c8.mem[g_c8.i + i] << (8 - pos % 8);

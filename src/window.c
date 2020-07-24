@@ -7,7 +7,8 @@
 WINDOW *c8Win;
 
 void initWindow() {
-    c8Win = newwin(C8_DSP_HEIGHT + 2, C8_DSP_WIDTH * PRINT_PIXEL_WIDTH + 2, 0, 0);
+    c8Win = newwin(C8_DSP_HEIGHT + 2, C8_DSP_WIDTH * PRINT_PIXEL_WIDTH + 2,
+        0, 0);
     box(c8Win, 0, 0);
 }
 

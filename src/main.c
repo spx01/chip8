@@ -35,7 +35,8 @@ int main(int argc, char **argv) {
 
         c8Clock();
 
-        sleepSec(1.0 / C8_CLOCK_SPEED - ((double)(clock() - clockStart)) / CLOCKS_PER_SEC);
+        sleepSec(1.0 / C8_CLOCK_SPEED - ((double)(clock() - clockStart))
+            / CLOCKS_PER_SEC);
     }
     exitC8();
     return 0;
